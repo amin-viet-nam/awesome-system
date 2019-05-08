@@ -1,0 +1,95 @@
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: "api-awesome"
+  labels:
+    app: "api-awesome"
+spec:
+  ports:
+  - port: 3000
+    name: http
+  selector:
+    app: "api-awesome"
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "api-awesome"
+  labels:
+    app: "api-awesome"
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: "api-awesome"
+  template:
+    metadata:
+      labels:
+        app: "api-awesome"
+    spec:
+      containers:
+      - name: "api-awesome"
+        image: "kennship/http-echo" #gcr.io/awesome-238003/api:v2019.05.08
+        envFrom:
+        - secretRef:
+            name: api-env
+        env:
+        - name: TZ
+          value: Asia/Ho_Chi_Minh
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "200m"
+            memory: "512Mi"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 1
+          periodSeconds: 15
+        ports:
+        - containerPort: 3000
+---
+apiVersion: "autoscaling/v1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "api-hpa"
+  labels:
+    app: "api-awesome"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "api-awesome"
+    apiVersion: "apps/v1beta1"
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: awesome-api.anhminhltd.com
+spec:
+  hosts:
+  - "awesome-api.anhminhltd.com"
+  gateways:
+  - awesome-gateway
+  http:
+  - route:
+    - destination:
+        host: api-awesome
+    retries:
+      attempts: 3
+      perTryTimeout: 3s
