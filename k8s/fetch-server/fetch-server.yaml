@@ -1,0 +1,27 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: fetch-server-cronjob
+spec:
+  schedule: "* */12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: "api-awesome"
+            image: "gcr.io/awesome-238003/awesome-fetch-server:v2019.05.10"
+            envFrom:
+            - secretRef:
+                name: fetch-server-env
+            env:
+            - name: TZ
+              value: Asia/Ho_Chi_Minh
+            resources:
+              requests:
+                cpu: "100m"
+                memory: "256Mi"
+              limits:
+                cpu: "200m"
+                memory: "512Mi"
+          restartPolicy: OnFailure

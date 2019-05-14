@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: "api-awesome"
-        image: "kennship/http-echo" #gcr.io/awesome-238003/api:v2019.05.08
+        image: "gcr.io/awesome-238003/awesome-api-server:v2019.05.14"
         envFrom:
         - secretRef:
             name: api-env
@@ -75,7 +75,6 @@ spec:
   minReplicas: 1
   maxReplicas: 10
   targetCPUUtilizationPercentage: 70
-
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
