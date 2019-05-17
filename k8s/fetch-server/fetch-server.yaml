@@ -3,14 +3,19 @@ kind: CronJob
 metadata:
   name: fetch-server-cronjob
 spec:
-  schedule: "* */12 * * *"
+  schedule: "0 * * * *"
   jobTemplate:
     spec:
       template:
+        metadata:
+          labels:
+            app: fetch-server-cronjob
+          annotations:
+            sidecar.istio.io/inject: "false"
         spec:
           containers:
-          - name: "api-awesome"
-            image: "gcr.io/awesome-238003/awesome-fetch-server:v2019.05.10"
+          - name: "fetch-server"
+            image: "gcr.io/awesome-238003/awesome-fetch-server:v2019.05.15"
             envFrom:
             - secretRef:
                 name: fetch-server-env
