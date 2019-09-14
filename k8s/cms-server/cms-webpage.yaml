@@ -32,22 +32,12 @@ spec:
     spec:
       containers:
       - name: "cms-webpage"
-        image: "gcr.io/awesome-238003/awesome-cms-webpage:v2019.09.14.1"
+        image: "gcr.io/awesome-238003/awesome-cms-webpage:v2019.09.15.1"
         env:
-        - name: TZ
-          value: Asia/Ho_Chi_Minh
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 5
-          periodSeconds: 15
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 80
-          initialDelaySeconds: 1
-          periodSeconds: 15   
+          - name: TZ
+            value: Asia/Ho_Chi_Minh
+        ports:
+          - containerPort: 80
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
