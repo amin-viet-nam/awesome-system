@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: "cms-server"
-        image: "gcr.io/awesome-238003/awesome-cms-server:v2019.09.14"
+        image: "gcr.io/awesome-238003/awesome-cms-server:v2019.09.14.1"
         envFrom:
         - secretRef:
             name: cms-api-env

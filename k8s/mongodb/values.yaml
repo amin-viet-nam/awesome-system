@@ -38,20 +38,20 @@ image:
 ## Enable authentication
 ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
 #
-usePassword: true
+usePassword: false
 # existingSecret: name-of-existing-secret
 
 ## MongoDB admin password
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
 ##
-mongodbRootPassword: ltmBb9bzg0
+# mongodbRootPassword: ltmBb9bzg0
 
 ## MongoDB custom user and database
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
 ##
-# mongodbUsername: username
-# mongodbPassword: password
-# mongodbDatabase: database
+# mongodbUsername: admin
+# mongodbPassword: ltmBb9bzg0
+# mongodbDatabase: awesome
 
 ## Whether enable/disable IPv6 on MongoDB
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-ipv6
