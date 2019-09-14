@@ -22,8 +22,8 @@ certbot renew \
 	--work-dir $EXECUTE_DIR \
 	--logs-dir $EXECUTE_DIR \
 
-cp $EXECUTE_DIR/live/anhminhltd.com/fullchain.pem anhminhltd.com.crt
-cp $EXECUTE_DIR/live/anhminhltd.com/privkey.pem anhminhltd.com.key
+cp $EXECUTE_DIR/live/anhminhltd.com-0001/fullchain.pem anhminhltd.com.crt
+cp $EXECUTE_DIR/live/anhminhltd.com-0001/privkey.pem anhminhltd.com.key
 
 kubectl create secret generic istio-ingressgateway-certs \
 	--from-file=$CONFIG_DIR/anhminhltd.com.crt \

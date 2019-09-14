@@ -21,7 +21,7 @@ spec:
   replicas: 3
   strategy:
     rollingUpdate:
-      maxUnavailable: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: "api-awesome"
@@ -72,7 +72,7 @@ spec:
     kind: "Deployment"
     name: "api-awesome"
     apiVersion: "apps/v1beta1"
-  minReplicas: 1
+  minReplicas: 3
   maxReplicas: 10
   targetCPUUtilizationPercentage: 70
 ---
