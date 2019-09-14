@@ -1,0 +1,79 @@
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: "cms-server"
+  labels:
+    app: "cms-server"
+spec:
+  ports:
+  - port: 4000
+    name: http
+  selector:
+    app: "cms-server"
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "cms-server"
+  labels:
+    app: "cms-server"
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: "cms-server"
+  template:
+    metadata:
+      labels:
+        app: "cms-server"
+    spec:
+      containers:
+      - name: "cms-server"
+        image: "gcr.io/awesome-238003/awesome-cms-server:v2019.09.14"
+        envFrom:
+        - secretRef:
+            name: cms-api-env
+        env:
+        - name: TZ
+          value: Asia/Ho_Chi_Minh
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "200m"
+            memory: "512Mi"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 4000
+          initialDelaySeconds: 5
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 4000
+          initialDelaySeconds: 1
+          periodSeconds: 15
+        ports:
+        - containerPort: 4000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: cms-api.anhminhltd.com
+spec:
+  hosts:
+  - "cms-api.anhminhltd.com"
+  gateways:
+  - awesome-gateway
+  http:
+  - route:
+    - destination:
+        host: cms-server
+    retries:
+      attempts: 3
+      perTryTimeout: 3s
